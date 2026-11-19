@@ -1,0 +1,1 @@
+# This file ensures the vault directory exists in git while ignoring its dynamic contents.

@@ -1,0 +1,12 @@
+# Vault storage data (keep vault directory and htaccess, ignore dynamic data)
+/vault/*
+!/vault/.htaccess
+!/vault/.gitkeep
+
+# Sensitive and environment files
+.env
+.env.local
+*.log
+.DS_Store
+Thumbs.db
+db.json
