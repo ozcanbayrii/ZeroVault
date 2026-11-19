@@ -1,42 +1,35 @@
 # ZeroVault
 
-> **Zero-database, zero-config, self-hosted secure file sharing portal & ephemeral drop vault.**
+> Zero-database, zero-config, self-hosted secure file sharing portal and ephemeral drop vault.
 
-[![PHP Version](https://img.shields.io/badge/PHP-8.0%2B-777BB4?logo=php&logoColor=white)](https://www.php.net/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![Database](https://img.shields.io/badge/Database-Zero%20(Flat--File)-blue.svg)](#)
-[![Theme](https://img.shields.io/badge/Theme-Dark%20%7C%20Light-orange.svg)](#)
+[Türkçe dokümantasyon için README_TR.md dosyasına göz atın.](README_TR.md)
 
 ---
 
-🇹🇷 **Türkçe dokümantasyon için [README_TR.md](README_TR.md) dosyasına göz atın.**
+ZeroVault is a lightweight, zero-database, self-hosted file delivery portal. It allows you to safely upload, manage, and share files with external clients or recipients using single-file URLs, optional passcode protection, and integrated VirusTotal security verification.
 
----
+## Key Features
 
-ZeroVault is a lightweight, zero-database, self-hosted file delivery portal. It allows you to safely upload, manage, and share files with external clients or friends using private single-file URLs, optional passcode protection, and integrated VirusTotal security verification.
-
-## 🌟 Key Features
-
-- **🌐 Multi-Language Architecture (i18n):**
-  - **English** (default) and **Turkish** included out-of-the-box.
-  - **Dynamic Language Manager:** Add any language (German, Spanish, French, etc.), customize translations live in the admin panel, or remove custom language packs without touching code.
+- **Multi-Language Architecture (i18n):**
+  - English (default) and Turkish included out-of-the-box.
+  - Dynamic Language Manager: Add any language, customize translations directly in the admin panel, or remove custom language packs without editing code.
   - Quick language selector in the header navigation.
-- **🌗 Light & Dark Theme:**
-  - Modern, high-contrast dark theme and clean light theme.
-  - Instant toggle with `localStorage` persistence and zero-flicker page loading.
-- **⚡ Zero-Database (Flat-File):**
-  - No MySQL, PostgreSQL, or Redis needed.
+- **Light and Dark Theme:**
+  - High-contrast dark theme and clean light theme.
+  - Instant toggle with localStorage persistence and zero-flicker loading.
+- **Zero-Database (Flat-File):**
+  - No MySQL, PostgreSQL, or Redis required.
   - Operates using hardened JSON storage protected by `LOCK_EX` concurrency file locking.
-- **🛡️ Enterprise-Grade Security:**
-  - `vault/` storage directory completely blocked from web access and script execution via Apache rules.
+- **Enterprise-Grade Security:**
+  - `vault/` storage directory completely blocked from web access and script execution via web server rules.
   - Dynamic file hashing (SHA-256 / random hex) — real file names and server paths are never exposed.
-  - IP-based rate limiting (preventing download spam & bandwidth exhaustion).
+  - IP-based rate limiting (preventing download spam and bandwidth exhaustion).
   - IP-based brute-force defense with automatic timed lockouts.
   - Real MIME-type detection (`finfo`) and banned extension inspection.
   - Strict `realpath` validation preventing path traversal attacks.
   - Full CSRF token protection on all administrative and authentication forms.
-- **📤 Smart File Distribution:**
-  - Modern drag-and-drop file upload zone.
+- **Smart File Distribution:**
+  - Drag-and-drop file upload zone.
   - Optional secret passcode protection for any file.
   - Integrated VirusTotal security scan report linking.
   - Instant one-click link copying with visual feedback.
@@ -45,47 +38,105 @@ ZeroVault is a lightweight, zero-database, self-hosted file delivery portal. It 
 
 ---
 
-## 🚀 Quick Start & Installation
+## Server Installation & Setup (CLI)
 
-### Requirements
-- **PHP 8.0 or higher**
-- Apache web server (`mod_rewrite` & `mod_headers` recommended)
-- PHP extensions: `fileinfo`, `session`, `json`
+### System Requirements
+- PHP 8.0 or higher
+- Web server: Apache (with `mod_rewrite` & `mod_headers`) or Nginx
+- Required PHP extensions: `fileinfo`, `session`, `json`
 
-### Running Locally (Windows)
-Double-click `start-server.bat` in the project root or run:
+### 1. Clone the Repository via Terminal / SSH / CMD
+Navigate to your web root directory (e.g., `/var/www/html` or your domain folder) and clone the repository:
+
 ```bash
-php -S localhost:8000 index.php
+git clone https://github.com/ozcanbayrii/ZeroVault.git .
 ```
-Then visit: **`http://localhost:8000`**
 
-### Deploying to Production (cPanel / Apache / VPS)
-1. Upload all project files to your web root (or subdirectory).
-2. Ensure the `vault/` and `languages/` directories have write permissions (`0755` or `0775`).
-3. Open your domain in any browser to launch the **Initial Setup Wizard**.
-4. Define your administrator credentials and launch your secure vault!
+*(If deploying into a subdirectory, omit the trailing dot and enter the `ZeroVault` folder)*
+
+### 2. Set Permissions
+Ensure the web server process has write access to the `vault/` and `languages/` directories:
+
+**Linux / Ubuntu / Debian (Apache or Nginx):**
+```bash
+sudo chown -R www-data:www-data vault languages
+chmod -R 755 vault languages
+```
+
+**cPanel / Shared Hosting / Windows Server:**
+Set file permissions on the `vault` and `languages` folders to `0755` or `0775`.
+
+### 3. Web Server Configuration
+
+#### Apache
+Apache functions automatically using the included `.htaccess` files. Make sure `mod_rewrite` and `mod_headers` are enabled:
+
+```bash
+sudo a2enmod rewrite headers
+sudo systemctl restart apache2
+```
+
+#### Nginx
+If running Nginx, add the following configuration block inside your `server { ... }` block:
+
+```nginx
+server {
+    listen 80;
+    server_name your-domain.com;
+    root /var/www/html;
+    index index.php;
+
+    # Block access to vault and languages directories
+    location ~ ^/(vault|languages)/ {
+        deny all;
+        return 404;
+    }
+
+    # Block hidden files (.git, .env, etc.)
+    location ~ /\. {
+        deny all;
+        return 404;
+    }
+
+    # URL routing
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
+    }
+}
+```
+
+### 4. Run Initial Setup
+Open your domain in any browser:
+```text
+https://your-domain.com
+```
+The **Initial Setup Wizard** will launch automatically. Define your administrator username, password, and preferences to start using ZeroVault.
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```text
-├── index.php             # Unified monolithic core application & router
+├── index.php             # Unified monolithic application & router
 ├── languages/            # Localization dictionary files
-│   ├── .htaccess         # Access protection for language files
+│   ├── .htaccess         # Direct access protection
 │   ├── en.json           # English language pack (Default)
 │   └── tr.json           # Turkish language pack
 ├── vault/                # Secure file storage & configuration (Git-ignored)
-│   ├── .htaccess         # Absolute web access denial & execution prevention
+│   ├── .htaccess         # Web access denial & execution prevention
 │   └── .gitkeep
-├── .htaccess             # Root security headers & URL rewriting
+├── .htaccess             # Security headers & URL rewrite rules
 ├── .gitignore            # Git exclusion rules protecting private data
-├── start-server.bat      # One-click Windows local server launcher
 ├── README.md             # English documentation
 └── README_TR.md          # Turkish documentation
 ```
 
 ---
 
-## 📜 License
-Distributed under the **MIT License**.
+## License
+Distributed under the MIT License.
