@@ -8,6 +8,30 @@
 
 ZeroVault; harici bir SQL veritabanı (MySQL, PostgreSQL vb.) kurulumu gerektirmeyen, hafif ve güvenli bir kişisel dosya dağıtım sistemidir. Müşterilerinize, iş ortaklarınıza veya arkadaşlarınıza tekil güvenli bağlantılar, isteğe bağlı şifre koruması ve VirusTotal analiz raporlarıyla dosya teslim etmenizi sağlar.
 
+---
+
+## Ekran Görüntüleri
+
+### Yönetim Paneli (Envanter ve İstatistikler)
+![Yönetim Paneli](docs/screenshots/01_dashboard_inventory.png)
+
+### Sürükle ve Bırak Dosya Yükleme
+![Dosya Yükleme](docs/screenshots/02_dashboard_upload.png)
+
+### Genel Dosya İndirme ve Güvenlik Raporu
+![Dosya İndirme Sayfası](docs/screenshots/03_public_download.png)
+
+### Şifreli Dosya Erişim Ekranı
+![Şifreli Dosya Ekranı](docs/screenshots/04_password_prompt.png)
+
+### Panel İçi Dil Yönetimi ve Çeviri Editörü
+![Dil Yönetimi](docs/screenshots/05_languages_manager.png)
+
+### Modern Aydınlık Tema
+![Aydınlık Tema](docs/screenshots/06_light_theme_inventory.png)
+
+---
+
 ## Öne Çıkan Özellikler
 
 - **Çoklu Dil Desteği (i18n):**
@@ -123,6 +147,8 @@ Otomatik olarak açılan **Kurulum Sihirbazı** üzerinden yönetici kullanıcı
 
 ```text
 ├── index.php             # Çekirdek uygulama, rota ve arayüz motoru
+├── docs/
+│   └── screenshots/      # Yüksek çözünürlüklü arayüz ekran görüntüleri
 ├── languages/            # Yerelleştirme ve dil paketleri
 │   ├── .htaccess         # Dil dosyalarına doğrudan erişim koruması
 │   ├── en.json           # İngilizce dil paketi (Varsayılan)

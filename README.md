@@ -8,6 +8,30 @@
 
 ZeroVault is a lightweight, zero-database, self-hosted file delivery portal. It allows you to safely upload, manage, and share files with external clients or recipients using single-file URLs, optional passcode protection, and integrated VirusTotal security verification.
 
+---
+
+## Screenshots
+
+### Admin Dashboard (Inventory & Analytics)
+![Admin Dashboard](docs/screenshots/01_dashboard_inventory.png)
+
+### Drag & Drop File Upload
+![File Upload](docs/screenshots/02_dashboard_upload.png)
+
+### Public File Download & Security Scan
+![Public Download Page](docs/screenshots/03_public_download.png)
+
+### Password-Protected Access Gate
+![Password Gate](docs/screenshots/04_password_prompt.png)
+
+### In-Panel Language & Localization Manager
+![Language Manager](docs/screenshots/05_languages_manager.png)
+
+### Modern Light Theme
+![Light Theme Mode](docs/screenshots/06_light_theme_inventory.png)
+
+---
+
 ## Key Features
 
 - **Multi-Language Architecture (i18n):**
@@ -123,6 +147,8 @@ The **Initial Setup Wizard** will launch automatically. Define your administrato
 
 ```text
 ├── index.php             # Unified monolithic application & router
+├── docs/
+│   └── screenshots/      # High-resolution UI showcase images
 ├── languages/            # Localization dictionary files
 │   ├── .htaccess         # Direct access protection
 │   ├── en.json           # English language pack (Default)
